@@ -173,9 +173,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   height: 45.0,
                   child: FlatButton(
                     onPressed: () {
-                      signInWithGoogle().whenComplete(() =>
-                          Navigator.pushReplacementNamed(
-                              context, LandingPage.id));
+                      // signInWithGoogle().whenComplete(() =>
+                      //  Navigator.pushReplacementNamed(
+                      //   context, LandingPage.id));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

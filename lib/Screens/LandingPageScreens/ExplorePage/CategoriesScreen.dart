@@ -83,11 +83,21 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   _isSearching = true;
                 });
                 filterSearchResults(value);
+                if (!_isSearching) {
+                  setState(() {
+                    value = '';
+                  });
+                }
               },
               hintText: 'Explore any category',
               suffixIcon: _isSearching
-                  ? Icon(
-                      Icons.cancel,
+                  ? IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _isSearching = false;
+                        });
+                      },
+                      icon: Icon(Icons.cancel),
                       color: Colors.grey,
                     )
                   : Padding(
