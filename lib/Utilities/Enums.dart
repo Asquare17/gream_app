@@ -1,0 +1,1 @@
+enum IndicatorColor { FIRST, SECOND, THIRD }

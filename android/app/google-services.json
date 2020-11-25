@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "313970188154",
+    "firebase_url": "https://greamit-693db.firebaseio.com",
+    "project_id": "greamit-693db",
+    "storage_bucket": "greamit-693db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313970188154:android:84cc5efe855cec1f7780c3",
+        "android_client_info": {
+          "package_name": "com.greamit.greamit_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313970188154-rnkmgmi39o37c3denmndkv47u6nrqeoe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.greamit.greamit_app",
+            "certificate_hash": "5a67de8ef956ddc9b39ef76f49b15c6edf81311d"
+          }
+        },
+        {
+          "client_id": "313970188154-tiopo02963lv4e3gfqpe7av01071qmrp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.greamit.greamit_app",
+            "certificate_hash": "be9d67daa59a7e415878ad35c73f4008ecfa11f6"
+          }
+        },
+        {
+          "client_id": "313970188154-l316ilbuev28l48tsohe7cv0umkn7joq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCG_Sq93mzIfMNtOD4mdgiABUlcU57PzAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313970188154-l316ilbuev28l48tsohe7cv0umkn7joq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
