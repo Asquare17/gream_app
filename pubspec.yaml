@@ -40,7 +40,6 @@ dependencies:
   firebase_core: ^0.4.0+9
   google_sign_in: ^4.5.1
   cached_network_image: ^2.3.3
-  flutter_facebook_login: ^3.0.0
   cupertino_icons: ^1.0.0
 
 dev_dependencies:

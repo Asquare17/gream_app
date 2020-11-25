@@ -93,9 +93,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               suffixIcon: _isSearching
                   ? IconButton(
                       onPressed: () {
-                        setState(() {
-                          _isSearching = false;
-                        });
+                        searchEditingController.clear();
                       },
                       icon: Icon(Icons.cancel),
                       color: Colors.grey,

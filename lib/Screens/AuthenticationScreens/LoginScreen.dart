@@ -138,9 +138,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 45.0,
                   child: FlatButton(
                     onPressed: () {
-                      //signInWithGoogle().whenComplete(() =>
-                      //  Navigator.pushReplacementNamed(
-                      //   context, CompleteRegistrationScreen.id));
+                      signInWithGoogle().whenComplete(() =>
+                          Navigator.pushReplacementNamed(
+                              context, CompleteRegistrationScreen.id));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
