@@ -10,6 +10,7 @@ class FireStoreConstants {
   static const LINK = "link";
   static const TITLE = "title";
   static const USERS = "users";
+  static const NOTIFICATION = "notifications";
   static const EMAIL = "email";
   static const GENDER = "gender";
   static const GREAMS = "greams";

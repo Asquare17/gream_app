@@ -33,34 +33,48 @@ class SettingsPage extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 18.0),
-                  child: Text(
-                    'Account',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                  child: ListTile(
+                    title: Text(
+                      'Account',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-                Text('Email Address'),
-                Text(
-                  'judithlonge@',
-                  style: TextStyle(color: Colors.black26),
+                ListTile(
+                  title: Text('Email Address'),
+                  onTap: () {},
+                  subtitle: Text(
+                    'judithlonge@',
+                    style: TextStyle(color: Colors.black26),
+                  ),
                 ),
                 SizedBox(height: 18.0),
-                Text('Language'),
-                Text(
-                  'English',
-                  style: TextStyle(color: Colors.black26),
+                ListTile(
+                  onTap: () {},
+                  title: Text('Language'),
+                  subtitle: Text(
+                    'English',
+                    style: TextStyle(color: Colors.black26),
+                  ),
                 ),
                 SizedBox(height: 18.0),
-                Text('Blocked list'),
-                Text(
-                  '4',
-                  style: TextStyle(color: Colors.black26),
+                ListTile(
+                  onTap: () {},
+                  title: Text('Blocked list'),
+                  subtitle: Text(
+                    '4',
+                    style: TextStyle(color: Colors.black26),
+                  ),
                 ),
                 SizedBox(height: 18.0),
-                Text('Password'),
-                Text(
-                  '********',
-                  style: TextStyle(color: Colors.black26),
+                ListTile(
+                  onTap: () {},
+                  title: Text('Password'),
+                  subtitle: Text(
+                    '********',
+                    style: TextStyle(color: Colors.black26),
+                  ),
                 ),
                 SizedBox(height: 8.0),
               ],
@@ -82,24 +96,32 @@ class SettingsPage extends StatelessWidget {
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Text(
-                  'Privacy Policy',
-                  style: TextStyle(color: Colors.black54),
+                ListTile(
+                  title: Text(
+                    'Privacy Policy',
+                    style: TextStyle(color: Colors.black54),
+                  ),
                 ),
                 SizedBox(height: 18.0),
-                Text(
-                  'Terms & Conditions',
-                  style: TextStyle(color: Colors.black54),
+                ListTile(
+                  title: Text(
+                    'Terms & Conditions',
+                    style: TextStyle(color: Colors.black54),
+                  ),
                 ),
                 SizedBox(height: 18.0),
-                Text(
-                  'FAQs',
-                  style: TextStyle(color: Colors.black54),
+                ListTile(
+                  title: Text(
+                    'FAQs',
+                    style: TextStyle(color: Colors.black54),
+                  ),
                 ),
                 SizedBox(height: 18.0),
-                Text(
-                  'About the app',
-                  style: TextStyle(color: Colors.black54),
+                ListTile(
+                  title: Text(
+                    'About the app',
+                    style: TextStyle(color: Colors.black54),
+                  ),
                 ),
                 SizedBox(height: 18.0),
                 Text(
@@ -127,7 +149,6 @@ class SettingsPage extends StatelessWidget {
                   )
                 ],
               )),
-
         ],
       ),
     );
