@@ -23,12 +23,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   Stream<QuerySnapshot> stream;
   List<UserModel> listUserModel = <UserModel>[];
   UserModel mainUserModel = new UserModel();
 
-  final ValueNotifier<String> mainHomeFeedFilterListener = new ValueNotifier("");
+  final ValueNotifier<String> mainHomeFeedFilterListener =
+      new ValueNotifier("");
 
   @override
   void initState() {
@@ -41,9 +41,7 @@ class _HomePageState extends State<HomePage> {
 
     FirestoreCloudDb().getUserDoc(getUser.uID).get().then((value) {
       mainUserModel = UserModel.fromJson(value.data);
-    }).then((value) {
-
-    });
+    }).then((value) {});
   }
 
   @override
@@ -76,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                       textColor: Colors.white,
                       items: _filterList,
                       hintText: 'Popular',
-                      onChanged: (string){
+                      onChanged: (string) {
                         mainHomeFeedFilterListener.value = string;
                       },
                     ),
@@ -94,127 +92,146 @@ class _HomePageState extends State<HomePage> {
                   stream: stream,
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasData && snapshot.data.documents != null) {
-
                       List<GreamitPost> listGreamits = <GreamitPost>[];
                       List<bool> isLikedList = <bool>[];
 
                       snapshot.data.documents.forEach((element) {
                         listGreamits.add(GreamitPost.fromJson(element.data));
-                        isLikedList.add(FirestoreCloudDb().isLiked(documentID: element.documentID, listOfLikes: mainUserModel.likedGreamPosts));
+                        isLikedList.add(FirestoreCloudDb().isLiked(
+                            documentID: element.documentID,
+                            listOfLikes: mainUserModel.likedGreamPosts));
                       });
 
                       return ValueListenableBuilder(
                           valueListenable: mainHomeFeedFilterListener,
                           builder: (context, String value, child) {
-
                             var filteredGreamitLists;
 
-                            if(value == "Following") {
+                            if (value == "Following") {
+                              filteredGreamitLists = listGreamits.where(
+                                  (element) => mainUserModel.following
+                                      .contains(element.postUserID));
 
-                              filteredGreamitLists = listGreamits.where((element) => mainUserModel.following.contains(element.postUserID));
-
-                              if(filteredGreamitLists.isNotEmpty) {
-
+                              if (filteredGreamitLists.isNotEmpty) {
                                 return Expanded(
                                   child: ListView.builder(
                                     itemCount: filteredGreamitLists.length,
                                     itemBuilder: (context, index) {
-                                      
                                       int indexForDocReference =
                                           listGreamits.indexWhere((element) =>
-                                              element.postTimestamp == filteredGreamitLists.toList()[index].postTimestamp);
+                                              element.postTimestamp ==
+                                              filteredGreamitLists
+                                                  .toList()[index]
+                                                  .postTimestamp);
 
                                       return CustomPostedGream(
                                         reGream: () {},
                                         commentOnGream: () {
-
                                           navigate(
                                               context,
                                               GreamDetailsPage(
-                                                greamitPost: listGreamits[index],
+                                                greamitPost:
+                                                    listGreamits[index],
                                                 documentReference: snapshot
-                                                    .data.documents[indexForDocReference].reference,
+                                                    .data
+                                                    .documents[
+                                                        indexForDocReference]
+                                                    .reference,
                                               ));
-
                                         },
                                         likeGream: () {
-
                                           navigate(
                                               context,
                                               GreamDetailsPage(
-                                                greamitPost: filteredGreamitLists.toList()[index],
+                                                greamitPost:
+                                                    filteredGreamitLists
+                                                        .toList()[index],
                                                 documentReference: snapshot
-                                                    .data.documents[indexForDocReference].reference,
+                                                    .data
+                                                    .documents[
+                                                        indexForDocReference]
+                                                    .reference,
                                               ));
-
                                         },
                                         isLiked: isLikedList[index],
                                         onGreamitPostTap: () {
                                           navigate(
                                               context,
                                               GreamDetailsPage(
-                                                greamitPost: filteredGreamitLists.toList()[index],
+                                                greamitPost:
+                                                    filteredGreamitLists
+                                                        .toList()[index],
                                                 documentReference: snapshot
-                                                    .data.documents[indexForDocReference].reference,
+                                                    .data
+                                                    .documents[
+                                                        indexForDocReference]
+                                                    .reference,
                                               ));
                                         },
-                                        description: filteredGreamitLists.toList()[index].description,
-                                        title: filteredGreamitLists.toList()[index].title,
-                                        numberOfComments: filteredGreamitLists.toList()[index]
+                                        description: filteredGreamitLists
+                                            .toList()[index]
+                                            .description,
+                                        title: filteredGreamitLists
+                                            .toList()[index]
+                                            .title,
+                                        numberOfComments: filteredGreamitLists
+                                            .toList()[index]
                                             .comments
                                             .length
                                             .toString(),
-                                        numberOfLikes:
-                                        filteredGreamitLists.toList()[index].likes.length.toString(),
-                                        postersName: filteredGreamitLists.toList()[index].postUserFullname,
-                                        postCategories: filteredGreamitLists.toList()[index].categoryList,
-                                        link: filteredGreamitLists.toList()[index].link,
-                                        postedTime:
-                                        Jiffy.unix(filteredGreamitLists.toList()[index].postTimestamp)
+                                        numberOfLikes: filteredGreamitLists
+                                            .toList()[index]
+                                            .likes
+                                            .length
+                                            .toString(),
+                                        postersName: filteredGreamitLists
+                                            .toList()[index]
+                                            .postUserFullname,
+                                        postCategories: filteredGreamitLists
+                                            .toList()[index]
+                                            .categoryList,
+                                        link: filteredGreamitLists
+                                            .toList()[index]
+                                            .link,
+                                        postedTime: Jiffy.unix(
+                                                filteredGreamitLists
+                                                    .toList()[index]
+                                                    .postTimestamp)
                                             .fromNow(),
                                         postersImage: "",
                                       );
                                     },
                                   ),
                                 );
-
                               } else {
-
                                 return Container();
-
                               }
-
-
                             } else {
-
                               return Expanded(
                                 child: ListView.builder(
                                   itemCount: listGreamits.length,
                                   itemBuilder: (context, index) {
-
                                     return CustomPostedGream(
+                                      documentReference: snapshot
+                                          .data.documents[index].reference,
                                       reGream: () {},
                                       commentOnGream: () {
-
                                         navigate(
                                             context,
                                             GreamDetailsPage(
                                               greamitPost: listGreamits[index],
-                                              documentReference: snapshot
-                                                  .data.documents[index].reference,
+                                              documentReference: snapshot.data
+                                                  .documents[index].reference,
                                             ));
-
                                       },
                                       likeGream: () {
-
                                         navigate(
                                             context,
                                             GreamDetailsPage(
                                               greamitPost: listGreamits[index],
-                                              documentReference: snapshot
-                                                  .data.documents[index].reference,
+                                              documentReference: snapshot.data
+                                                  .documents[index].reference,
                                             ));
-
                                       },
                                       isLiked: isLikedList[index],
                                       onGreamitPostTap: () {
@@ -222,34 +239,36 @@ class _HomePageState extends State<HomePage> {
                                             context,
                                             GreamDetailsPage(
                                               greamitPost: listGreamits[index],
-                                              documentReference: snapshot
-                                                  .data.documents[index].reference,
+                                              documentReference: snapshot.data
+                                                  .documents[index].reference,
                                             ));
                                       },
-                                      description: listGreamits[index].description,
+                                      description:
+                                          listGreamits[index].description,
                                       title: listGreamits[index].title,
                                       numberOfComments: listGreamits[index]
                                           .comments
                                           .length
                                           .toString(),
-                                      numberOfLikes:
-                                      listGreamits[index].likes.length.toString(),
-                                      postersName: listGreamits[index].postUserFullname,
-                                      postCategories: listGreamits[index].categoryList,
+                                      numberOfLikes: listGreamits[index]
+                                          .likes
+                                          .length
+                                          .toString(),
+                                      postersName:
+                                          listGreamits[index].postUserFullname,
+                                      postCategories:
+                                          listGreamits[index].categoryList,
                                       link: listGreamits[index].link,
-                                      postedTime:
-                                      Jiffy.unix(listGreamits[index].postTimestamp)
+                                      postedTime: Jiffy.unix(
+                                              listGreamits[index].postTimestamp)
                                           .fromNow(),
                                       postersImage: "",
                                     );
                                   },
                                 ),
                               );
-
                             }
-
-                        }
-                      );
+                          });
                     } else if (!snapshot.hasData) {
                       return Text(
                         "No data",

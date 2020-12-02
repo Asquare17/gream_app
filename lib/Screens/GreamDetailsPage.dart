@@ -8,6 +8,7 @@ import 'package:greamit_app/CustomWidgets/Views/CustomTag.dart';
 import 'package:greamit_app/Model/WebMetaData.dart';
 import 'package:greamit_app/Model/gream.dart';
 import 'package:greamit_app/Model/userModel.dart';
+import 'package:greamit_app/Screens/GreamLinkView.dart';
 import 'package:greamit_app/Services/CloudRepo/CloudActivities.dart';
 import 'package:greamit_app/Services/Persistence/PersistentData.dart';
 import 'package:greamit_app/Services/WebMetaDataRepo.dart';
@@ -337,10 +338,20 @@ class _GreamDetailsPageState extends State<GreamDetailsPage> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 10.0),
-                          child: Text(
-                            widget.greamitPost.link,
-                            style: TextStyle(
-                                height: 1.5, fontStyle: FontStyle.italic),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => GreamLinkView(
+                                            greamUrl: widget.greamitPost.link,
+                                          )));
+                            },
+                            child: Text(
+                              widget.greamitPost.link,
+                              style: TextStyle(
+                                  height: 1.5, fontStyle: FontStyle.italic),
+                            ),
                           ),
                         ),
                         Container(

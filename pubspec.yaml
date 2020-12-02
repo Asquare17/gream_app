@@ -41,6 +41,7 @@ dependencies:
   google_sign_in: ^4.5.1
   cached_network_image: ^2.3.3
   cupertino_icons: ^1.0.0
+  webview_flutter: ^1.0.7
 
 dev_dependencies:
   flutter_test:

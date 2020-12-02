@@ -6,7 +6,6 @@ import 'package:greamit_app/Services/Persistence/PersistentData.dart';
 import 'package:greamit_app/Utilities/Constants.dart';
 
 class FirestoreCloudDb {
-
   final databaseReference = Firestore.instance;
 
   void writeNewUser({String userID, UserModel userModel}) async {
@@ -31,7 +30,9 @@ class FirestoreCloudDb {
   }
 
   DocumentReference getUserDoc(String usersID) {
-    return databaseReference.collection(FireStoreConstants.USERS).document(usersID);
+    return databaseReference
+        .collection(FireStoreConstants.USERS)
+        .document(usersID);
   }
 
   CollectionReference getUsersCollection() {
@@ -39,7 +40,9 @@ class FirestoreCloudDb {
   }
 
   DocumentReference getGreamDoc(String greamsID) {
-    return databaseReference.collection(FireStoreConstants.GREAMS).document(greamsID);
+    return databaseReference
+        .collection(FireStoreConstants.GREAMS)
+        .document(greamsID);
   }
 
   CollectionReference getGreamsCollection() {
@@ -47,7 +50,9 @@ class FirestoreCloudDb {
   }
 
   Query getUserGreamsCollection(String userID) {
-    return databaseReference.collection(FireStoreConstants.GREAMS).where("postUserID", isEqualTo:  userID);
+    return databaseReference
+        .collection(FireStoreConstants.GREAMS)
+        .where("postUserID", isEqualTo: userID);
   }
 
   Future<void> postGream({String userID, GreamitPost greamitPost}) async {
@@ -57,13 +62,15 @@ class FirestoreCloudDb {
         .setData(greamitPost.toJson());
   }
 
-  Future<void> likeUpdate({String greamDocID, DocumentReference greamDocumentReference, DocumentReference profileDocRef, List<String> likeList}) async {
-
-    if(likeList.isEmpty) {
-
+  Future<void> likeUpdate(
+      {String greamDocID,
+      DocumentReference greamDocumentReference,
+      DocumentReference profileDocRef,
+      List<String> likeList}) async {
+    if (likeList.isEmpty) {
       await databaseReference.runTransaction((transaction) async {
-
-        DocumentSnapshot snapshot = await transaction.get(greamDocumentReference);
+        DocumentSnapshot snapshot =
+            await transaction.get(greamDocumentReference);
 
         GreamitPost greamitPost = GreamitPost.fromJson(snapshot.data);
 
@@ -72,20 +79,16 @@ class FirestoreCloudDb {
         likes.add(getUser.uID);
 
         await transaction.update(greamDocumentReference, {
-          'likes' : likes,
+          'likes': likes,
         });
 
         addLikedGream(greamDocID, profileDocRef);
-
       });
-
     } else {
-
-      if(likeList.contains(getUser.uID)) {
-
+      if (likeList.contains(getUser.uID)) {
         await databaseReference.runTransaction((transaction) async {
-
-          DocumentSnapshot snapshot = await transaction.get(greamDocumentReference);
+          DocumentSnapshot snapshot =
+              await transaction.get(greamDocumentReference);
 
           GreamitPost greamitPost = GreamitPost.fromJson(snapshot.data);
 
@@ -94,18 +97,15 @@ class FirestoreCloudDb {
           likes.remove(getUser.uID);
 
           await transaction.update(greamDocumentReference, {
-            'likes' : likes,
+            'likes': likes,
           });
 
           removeLikedGream(greamDocID, profileDocRef);
-
         });
-
       } else {
-
         await databaseReference.runTransaction((transaction) async {
-
-          DocumentSnapshot snapshot = await transaction.get(greamDocumentReference);
+          DocumentSnapshot snapshot =
+              await transaction.get(greamDocumentReference);
 
           GreamitPost greamitPost = GreamitPost.fromJson(snapshot.data);
 
@@ -114,63 +114,53 @@ class FirestoreCloudDb {
           likes.add(getUser.uID);
 
           await transaction.update(greamDocumentReference, {
-            'likes' : likes,
+            'likes': likes,
           });
 
           addLikedGream(greamDocID, profileDocRef);
-
         });
-
       }
-
     }
-
   }
 
-  Future<void> removeLikedGream(String greamDocID, DocumentReference profileDocumentReference) async {
-
+  Future<void> removeLikedGream(
+      String greamDocID, DocumentReference profileDocumentReference) async {
     await databaseReference.runTransaction((transaction) async {
-
-      DocumentSnapshot snapshot = await transaction.get(profileDocumentReference);
+      DocumentSnapshot snapshot =
+          await transaction.get(profileDocumentReference);
       UserModel userModel = UserModel.fromJson(snapshot.data);
 
       List<String> likedGreams = userModel.likedGreamPosts;
 
       likedGreams.remove(greamDocID);
 
-      await transaction.update(profileDocumentReference, {
-        'likedGreamPosts' : likedGreams
-      });
-
+      await transaction
+          .update(profileDocumentReference, {'likedGreamPosts': likedGreams});
     });
-
   }
 
-  Future<void> addLikedGream(String greamDocID, DocumentReference profileDocumentReference) async {
-
+  Future<void> addLikedGream(
+      String greamDocID, DocumentReference profileDocumentReference) async {
     await databaseReference.runTransaction((transaction) async {
-
-      DocumentSnapshot snapshot = await transaction.get(profileDocumentReference);
+      DocumentSnapshot snapshot =
+          await transaction.get(profileDocumentReference);
       UserModel userModel = UserModel.fromJson(snapshot.data);
 
       List<String> likedGreams = userModel.likedGreamPosts;
 
       likedGreams.add(greamDocID);
 
-      await transaction.update(profileDocumentReference, {
-        'likedGreamPosts' : likedGreams
-      });
-
+      await transaction
+          .update(profileDocumentReference, {'likedGreamPosts': likedGreams});
     });
-
   }
 
-  Future<void> followProfile({DocumentReference documentReference, DocumentReference usersDocumentReference, List<String> followersList}) async {
-
-    if(followersList.isEmpty) {
-
+  Future<void> followProfile(
+      {DocumentReference documentReference,
+      DocumentReference usersDocumentReference,
+      List<String> followersList}) async {
+    if (followersList.isEmpty) {
       await databaseReference.runTransaction((transaction) async {
-
         DocumentSnapshot snapshot = await transaction.get(documentReference);
 
         UserModel userModel = UserModel.fromJson(snapshot.data);
@@ -179,24 +169,20 @@ class FirestoreCloudDb {
         followingList.add(usersDocumentReference.documentID);
 
         await transaction.update(documentReference, {
-          'following' : followingList,
+          'following': followingList,
         });
 
         usersDocumentReference.get().then((value) async {
-
           UserModel followedUserProfile = UserModel.fromJson(value.data);
-          await addFollowers(followingID: documentReference.documentID, documentReference: usersDocumentReference, followersList: followedUserProfile.followers);
-
+          await addFollowers(
+              followingID: documentReference.documentID,
+              documentReference: usersDocumentReference,
+              followersList: followedUserProfile.followers);
         });
-
       });
-
     } else {
-
-      if(followersList.contains(usersDocumentReference.documentID)) {
-
+      if (followersList.contains(usersDocumentReference.documentID)) {
         await databaseReference.runTransaction((transaction) async {
-
           DocumentSnapshot snapshot = await transaction.get(documentReference);
           UserModel userModel = UserModel.fromJson(snapshot.data);
 
@@ -204,22 +190,19 @@ class FirestoreCloudDb {
           followingList.remove(usersDocumentReference.documentID);
 
           await transaction.update(documentReference, {
-            'following' : followingList,
+            'following': followingList,
           });
 
           usersDocumentReference.get().then((value) async {
-
             UserModel followedUserProfile = UserModel.fromJson(value.data);
-            await removeFollowers(followingID: documentReference.documentID, documentReference: usersDocumentReference, followersList: followedUserProfile.followers);
-
+            await removeFollowers(
+                followingID: documentReference.documentID,
+                documentReference: usersDocumentReference,
+                followersList: followedUserProfile.followers);
           });
-
         });
-
       } else {
-
         await databaseReference.runTransaction((transaction) async {
-
           DocumentSnapshot snapshot = await transaction.get(documentReference);
 
           UserModel userModel = UserModel.fromJson(snapshot.data);
@@ -228,28 +211,26 @@ class FirestoreCloudDb {
           followingList.add(usersDocumentReference.documentID);
 
           await transaction.update(documentReference, {
-            'following' : followingList,
+            'following': followingList,
           });
 
           usersDocumentReference.get().then((value) async {
-
             UserModel followedUserProfile = UserModel.fromJson(value.data);
-            await addFollowers(followingID: documentReference.documentID, documentReference: usersDocumentReference, followersList: followedUserProfile.followers);
-
+            await addFollowers(
+                followingID: documentReference.documentID,
+                documentReference: usersDocumentReference,
+                followersList: followedUserProfile.followers);
           });
-
         });
-
       }
-
     }
-
   }
 
-  Future<void> removeFollowers({String followingID, DocumentReference documentReference, List<String> followersList}) async {
-
+  Future<void> removeFollowers(
+      {String followingID,
+      DocumentReference documentReference,
+      List<String> followersList}) async {
     await databaseReference.runTransaction((transaction) async {
-
       DocumentSnapshot snapshot = await transaction.get(documentReference);
       UserModel userModel = UserModel.fromJson(snapshot.data);
 
@@ -257,17 +238,16 @@ class FirestoreCloudDb {
       followingList.remove(followingID);
 
       await transaction.update(documentReference, {
-        'followers' : followingList,
+        'followers': followingList,
       });
-
     });
-
   }
 
-  Future<void> addFollowers({String followingID, DocumentReference documentReference, List<String> followersList}) async {
-
+  Future<void> addFollowers(
+      {String followingID,
+      DocumentReference documentReference,
+      List<String> followersList}) async {
     await databaseReference.runTransaction((transaction) async {
-
       DocumentSnapshot snapshot = await transaction.get(documentReference);
       UserModel userModel = UserModel.fromJson(snapshot.data);
 
@@ -275,35 +255,62 @@ class FirestoreCloudDb {
       followersList.add(followingID);
 
       await transaction.update(documentReference, {
-        'followers' : followersList,
+        'followers': followersList,
       });
-
     });
+  }
 
+  Future<void> removeBlocked(
+      {String blockedID,
+      DocumentReference documentReference,
+      List<String> blockedList}) async {
+    await databaseReference.runTransaction((transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(documentReference);
+      UserModel userModel = UserModel.fromJson(snapshot.data);
+
+      List<String> blockedList = userModel.blocked;
+      blockedList.remove(blockedID);
+
+      await transaction.update(documentReference, {
+        'blocked': blockedList,
+      });
+    });
+  }
+
+  Future<void> addBlocked(
+      {String blockedID,
+      DocumentReference documentReference,
+      List<String> blockedList}) async {
+    await databaseReference.runTransaction((transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(documentReference);
+      UserModel userModel = UserModel.fromJson(snapshot.data);
+
+      List<String> blockedList = userModel.blocked;
+      blockedList.add(blockedID);
+
+      await transaction.update(documentReference, {
+        'blocked': blockedList,
+      });
+    });
   }
 
   Future<void> increaseGreamitPosts({String userID}) async {
-
     await databaseReference.runTransaction((transaction) async {
-
       DocumentReference documentReference = getUserDoc(userID);
       DocumentSnapshot snapshot = await transaction.get(documentReference);
 
       UserModel userModel = UserModel.fromJson(snapshot.data);
       int greamsCounts = userModel.greamPosts;
 
-      await transaction.update(documentReference, {
-        'greamPosts' : greamsCounts + 1
-      });
-
+      await transaction
+          .update(documentReference, {'greamPosts': greamsCounts + 1});
     });
-
   }
 
-  Future<void> addComment({Map<String, dynamic> commentData, DocumentReference greamDocumentReference}) async {
-
+  Future<void> addComment(
+      {Map<String, dynamic> commentData,
+      DocumentReference greamDocumentReference}) async {
     await databaseReference.runTransaction((transaction) async {
-
       DocumentSnapshot snapshot = await transaction.get(greamDocumentReference);
 
       GreamitPost greamitPost = GreamitPost.fromJson(snapshot.data);
@@ -315,71 +322,137 @@ class FirestoreCloudDb {
       comments.add(commentModel);
 
       await transaction.update(greamDocumentReference, {
-        'comments' : allCommentToJson(comments),
+        'comments': allCommentToJson(comments),
       });
-
     });
-
   }
 
   bool isLiked({String documentID, List<String> listOfLikes}) {
-
-    if(listOfLikes != null) {
-
-      if(listOfLikes.contains(documentID)) {
-
+    if (listOfLikes != null) {
+      if (listOfLikes.contains(documentID)) {
         return true;
-
       }
-
     } else {
-
       return false;
-
     }
 
     return false;
-
   }
 
   bool isFollower({String userID, List<String> listOfFollowers}) {
-
-    if(listOfFollowers != null) {
-
-      if(listOfFollowers.contains(userID)) {
-
+    if (listOfFollowers != null) {
+      if (listOfFollowers.contains(userID)) {
         return true;
-
       }
-
     } else {
-
       return false;
-
     }
 
     return false;
-
   }
 
   bool isFollowing({String userID, List<String> listOfFollowers}) {
-
-    if(listOfFollowers != null) {
-
-      if(listOfFollowers.contains(userID)) {
-
+    if (listOfFollowers != null) {
+      if (listOfFollowers.contains(userID)) {
         return true;
-
       }
-
     } else {
-
       return false;
-
     }
 
     return false;
-
   }
 
+  bool isBlocked({String userID, List<String> listOfBlocked}) {
+    if (listOfBlocked != null) {
+      if (listOfBlocked.contains(userID)) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+
+    return false;
+  }
 }
+
+//  Future<void> blockedProfile({DocumentReference documentReference, DocumentReference usersDocumentReference, List<String> blockedList}) async {
+
+//     if(blockedList.isEmpty) {
+
+//       await databaseReference.runTransaction((transaction) async {
+
+//         DocumentSnapshot snapshot = await transaction.get(documentReference);
+
+//         UserModel userModel = UserModel.fromJson(snapshot.data);
+
+//         List<String> blockedList = userModel.blocked;
+//         blockedList.add(usersDocumentReference.documentID);
+
+//         await transaction.update(documentReference, {
+//           'blocked' : blockedList,
+//         });
+
+//         usersDocumentReference.get().then((value) async {
+
+//           UserModel blockedUserProfile = UserModel.fromJson(value.data);
+//           await addBlocked(blockedID: documentReference.documentID, documentReference: usersDocumentReference, blockedList: blockedUserProfile.followers);
+
+//         });
+
+//       });
+
+//     } else {
+
+//       if(followersList.contains(usersDocumentReference.documentID)) {
+
+//         await databaseReference.runTransaction((transaction) async {
+
+//           DocumentSnapshot snapshot = await transaction.get(documentReference);
+//           UserModel userModel = UserModel.fromJson(snapshot.data);
+
+//           List<String> followingList = userModel.following;
+//           followingList.remove(usersDocumentReference.documentID);
+
+//           await transaction.update(documentReference, {
+//             'following' : followingList,
+//           });
+
+//           usersDocumentReference.get().then((value) async {
+
+//             UserModel followedUserProfile = UserModel.fromJson(value.data);
+//             await removeFollowers(followingID: documentReference.documentID, documentReference: usersDocumentReference, followersList: followedUserProfile.followers);
+
+//           });
+
+//         });
+
+//       } else {
+
+//         await databaseReference.runTransaction((transaction) async {
+
+//           DocumentSnapshot snapshot = await transaction.get(documentReference);
+
+//           UserModel userModel = UserModel.fromJson(snapshot.data);
+
+//           List<String> followingList = userModel.following;
+//           followingList.add(usersDocumentReference.documentID);
+
+//           await transaction.update(documentReference, {
+//             'following' : followingList,
+//           });
+
+//           usersDocumentReference.get().then((value) async {
+
+//             UserModel followedUserProfile = UserModel.fromJson(value.data);
+//             await addFollowers(followingID: documentReference.documentID, documentReference: usersDocumentReference, followersList: followedUserProfile.followers);
+
+//           });
+
+//         });
+
+//       }
+
+//     }
+
+//   }

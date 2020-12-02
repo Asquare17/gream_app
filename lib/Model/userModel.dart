@@ -14,27 +14,29 @@ class UserModel {
   List<String> reGreamPosts;
   String username;
   List<String> followers;
+  List<String> blocked;
   List<String> following;
   int joinedDateTime;
 
   UserModel(
       {this.country,
-        this.dob,
-        this.email,
-        this.fullname,
-        this.gender,
-        this.greamsCategories,
-        this.uID,
-        this.comments,
-        this.greamPosts,
-        this.likedGreamPosts,
-        this.bio,
-        this.image,
-        this.reGreamPosts,
-        this.username,
-        this.followers,
-        this.following,
-        this.joinedDateTime});
+      this.dob,
+      this.email,
+      this.fullname,
+      this.gender,
+      this.greamsCategories,
+      this.uID,
+      this.comments,
+      this.greamPosts,
+      this.likedGreamPosts,
+      this.bio,
+      this.image,
+      this.reGreamPosts,
+      this.username,
+      this.followers,
+      this.following,
+      this.blocked,
+      this.joinedDateTime});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     country = json['country'];
@@ -53,6 +55,7 @@ class UserModel {
     image = json['image'];
     followers = json['followers'].cast<String>();
     following = json['following'].cast<String>();
+    blocked = json['blocked'].cast<String>();
     joinedDateTime = json['joinedDateTime'];
   }
 
@@ -74,8 +77,8 @@ class UserModel {
     data['username'] = this.username;
     data['followers'] = this.followers;
     data['following'] = this.following;
+    data['blocked'] = this.blocked;
     data['joinedDateTime'] = this.joinedDateTime;
     return data;
   }
 }
-
